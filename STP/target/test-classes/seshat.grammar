@@ -1,0 +1,90 @@
+#
+# Backup language grammar. To define a backup protocol, normally imported 
+# and to control the actions.
+#
+
+$"seshat>" 
+EXIT :exit ~ ;
+BYE  :exit ~ ;
+QUIT :exit ~ ;
+
+COMPUTER %STRING:cname {
+	TYPE [ winxp:typeXP | win7:typeWin7 | win8:typeWin8 | linux:typeLinux ] ,
+	IPADDR %STRING:ip ,
+	PORT %INTEGER:port ,	
+	EMAIL %STRING:email ,	
+	FOLDER %STRING:fname {
+		DELETE:delFolder , 
+		RESTRICTION  [ 
+			DATE %STRING:rdate 		|
+			TYPE %STRING:rtype 		|
+			HIDDEN:rhidden			|
+			NAME %STRING:rfname		|
+			SIZE %INTEGER:rsize		|
+			SYM:rsym
+		] , 
+	} , 
+	POLICY [ 
+		YEAR:policyYear 		| 
+		ANNUAL:policyYear 		| 
+		MONTHLY:policyMonth 	|
+		WEEKLY:policyWeek 		|
+		DAY:policyDay 			| 
+		DAILY:policyDay 
+	] 
+	TYPE [
+		 FULL:policyFull 					|
+		 DIFFERENTIAL:policyDifferential	| 
+		 INCEMENTAL:policyIncremental 		|
+		 NONE:policyNone 
+	] 
+	RETENTION [ 
+		EVER:PolicyRetEver 					| 
+		%INTEGER:policyRetentionCount [
+			YEARS:PolicyRetYear 				|
+			MONTHS:PolicyRetMonth 				|
+			WEEKS:PolicyRetWeek 				|
+			DAYS:policyRetDay
+		] :savePolicy
+	] 
+} :saveComputer ;
+
+LIST [
+	COMPUTERS:listComputers |
+	POLICY:listPolicies 	|
+	POLICIES:listPolicies 	|
+	SETTING:listSetting		];
+	
+SHOW [
+	COMPUTER  %STRING:listOneComputer |
+	POLICY 	  %STRING:listOnePolicy
+	SETTING:listSetting
+];
+
+DELETE [ 
+	COMPUTER %STRING:deleteComputer | 
+	POLICY:deletePolicy 			|
+	POLICIES:deletePolicy			|
+	EVERYTHING:deleteEverything 
+] ; 
+
+SETUP  POLICY:setupPolicy  ;
+
+MAXSIZE %INTEGER:maxSize [
+	TB:sizeTB 	|
+	GB:sizeGB	|
+	MB:sizeMB	] ;
+
+SAVE %STRING:profileSave ; 
+LOAD %STRING:profileLoad ; 
+		
+SET [
+	TEST:setTest			|
+	DB:setDB	 			] [
+	YES:setYes				|
+	ON:setYes				|
+	NO:setNo				|
+	OFF:setNo ] ;
+	
+ 
+

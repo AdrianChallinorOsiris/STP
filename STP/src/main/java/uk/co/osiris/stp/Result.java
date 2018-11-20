@@ -1,0 +1,6 @@
+package uk.co.osiris.stp;
+
+public enum Result {
+	SUCCESS, FAILURE, ILLEGALPARSE, 
+	ENDOFFILE, ENDOFINPUT, UNKNOWN, FILENOTFOUND, IOERROR , COMPLETE
+}
